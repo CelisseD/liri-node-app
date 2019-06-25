@@ -8,6 +8,9 @@ var axios = require("axios");
 var fs = require("fs");
 var Spotify = require('node-spotify-api');
 
+// CHALK
+var chalk = require('chalk');
+// console.log(chalk.blue('Hello world!'));
 
 // Variable for Spotify API
 var spotify = new Spotify(keys.spotify);
@@ -22,7 +25,7 @@ var userInput = process.argv.slice(3).join(" ");
 // SPOTIFY FUNCTION
 function spotifyThis() {
 
-    if (userInput === undefined || null) {
+    if (userInput === "undefined" || null) {
         userInput = "Ace of Base";
     }
     
@@ -31,18 +34,30 @@ function spotifyThis() {
     spotify
         .search({ type: "track", query: userInput, limit: 1})
         .then(function(response) {
-            console.log("============= S P O T I F Y  T H I S  S O N G ============= ");
-            console.log("Song Name: " + JSON.stringify(response.tracks.items[0].name, null, 2));
-            console.log("Artist Name: " + JSON.stringify(response.tracks.items[0].artists[0].name, null, 2));
-            console.log("Album Name: " + JSON.stringify(response.tracks.items[0].album.name, null, 2));
-            console.log("Preview Link: " + JSON.stringify(response.tracks.items[0].preview_url, null, 2));
-            console.log("============= S P O T I F Y  T H I S  S O N G ============= ");
+            console.log(chalk.red("\n============= ") + chalk.green("S P O T I F Y  T H I S  S O N G ") + chalk.red("============= \n"));
+            console.log(chalk.bold("Song Name: ") + JSON.stringify(response.tracks.items[0].name, null, 2));
+            console.log(chalk.bold("Artist Name: ") + JSON.stringify(response.tracks.items[0].artists[0].name, null, 2));
+            console.log(chalk.bold("Album Name: ") + JSON.stringify(response.tracks.items[0].album.name, null, 2));
+            console.log(chalk.bold("Preview Link: ") + chalk.blue(JSON.stringify(response.tracks.items[0].preview_url, null, 2)));
+            console.log(chalk.red("\n============= ") + chalk.green("S P O T I F Y  T H I S  S O N G ") + chalk.red("============= \n"));
         })
         .catch(function(err) {
             console.log(err);
         });
 }};
 
+// DO WHAT IT SAYS FUNCTION
+
+function doWhatItSays() {
+    fs.readFile("random.txt", "utf8", function(error,response) {
+        if (error) {
+            console.log(error);
+        } else {
+        var response = response.split(",");
+        spotifyThis(response);
+        }
+    });
+};
 
 // OMDB FUNCTION
 function movieThis() {
@@ -61,14 +76,14 @@ function movieThis() {
     axios.get(queryUrl)
     .then(function(response) {
         // console.log(JSON.stringify(response, null, 2));
-        console.log("============= M O V I E  T H I S ============= ");
+        console.log(chalk.green("\n============= ") + chalk.magentaBright("S P O T I F Y  T H I S  S O N G ") + chalk.green("============= \n"));
         console.log("Movie Title: " + JSON.stringify(response.data.Title, null, 2));
         console.log("Release Year: " + JSON.stringify(response.data.Year, null, 2));
         console.log("IMDB Rating: " + JSON.stringify(response.data.Ratings[0].Value, null, 2));
         console.log("Rotten Tomatoes Rating: " + JSON.stringify(response.data.Ratings[1].Value, null, 2));
         console.log("Produced In: " + JSON.stringify(response.data.Country, null, 2));
         console.log("Language: " + JSON.stringify(response.data.Language, null, 2));
-        console.log("============= M O V I E  T H I S ============= ");
+        console.log(chalk.green("\n============= ") + chalk.magentaBright("S P O T I F Y  T H I S  S O N G ") + chalk.green("============= \n"));
             })
 
         .catch(function(error) {
@@ -88,14 +103,6 @@ function movieThis() {
         });
 
 }};
-
-function doWhatItSays() {
-
-    
-
-
-
-}
 
 switch (whatToDo) {
     case "spotify-this-song":
