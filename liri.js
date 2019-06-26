@@ -25,7 +25,7 @@ var userInput = process.argv.slice(3).join(" ");
 // SPOTIFY FUNCTION
 function spotifyThis() {
 
-    if (userInput === "undefined" || null) {
+    if (userInput === undefined || null) {
         userInput = "Ace of Base";
     }
     
